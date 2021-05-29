@@ -3,9 +3,10 @@
 
 Screen::Screen(MyVector dir, Point camera, double dist1)
 {
-	height = 100;
-	width = 100;
-	double resolution = height / 1000;
+	height = 10;
+	width = 10;
+	pixels = 100;
+	double resolution = height / pixels;
 	dist = dist1;
 	MyVector n = dir.getOrt();
 	a = n.x;
@@ -22,17 +23,17 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	Point corner;
 	corner = right * (-width / 2) + center;
 	corner = up * (-height / 2) + corner;
-	points = new Point * [height];
-	for (int i = 0; i < height; i++)
+	points = new Point * [pixels];
+	for (int i = 0; i < pixels; i++)
 	{
-		points[i] = new Point[width];
+		points[i] = new Point[pixels];
 	}
 	points[0][0] = corner;
-	for (int i = 0; i < height; i++)
+	for (int i = 0; i < pixels; i++)
 	{
-		for (int j = 0; j < width; j++)
+		for (int j = 0; j < pixels; j++)
 		{
-			points[i][j] = up * i + (right * j + corner);
+			points[i][j] = up * i * resolution + (right * j * resolution + corner);
 		}
 	}
 }

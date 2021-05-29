@@ -11,9 +11,9 @@ int main()
 	MyVector a(1, 1, 1);
 	double dist = 1;
 	Screen screen(a, camera, dist);
-	for (int i = 0; i < screen.height; i++)
+	for (int i = 0; i < screen.pixels; i++)
 	{
-		for (int j = 0; j < screen.width; j++)
+		for (int j = 0; j < screen.pixels; j++)
 			if (screen.triangle_intersection(screen.points[i][j], camera, triangle) != 0)
 				std::cout << "@";
 			else
