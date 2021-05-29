@@ -5,6 +5,7 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 {
 	height = 100;
 	width = 100;
+	double resolution = height / 1000;
 	dist = dist1;
 	MyVector n = dir.getOrt();
 	a = n.x;
@@ -19,7 +20,7 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	right = (MyVector::cross(MyVector(0, 0, 1), dir)).getOrt();
 	up = (MyVector::cross(dir, right)).getOrt();
 	Point corner;
-	corner = right * (width / 2) + center;
+	corner = right * (-width / 2) + center;
 	corner = up * (-height / 2) + corner;
 	points = new Point * [height];
 	for (int i = 0; i < height; i++)
@@ -29,23 +30,22 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	points[0][0] = corner;
 	for (int i = 0; i < height; i++)
 	{
-		if (i != 0)
-			points[i][0] = up + points[i - 1][0];
-		for (int j = 1; j < width; j++)
+		for (int j = 0; j < width; j++)
 		{
-			points[i][j] = right + points[i][j - 1];
+			points[i][j] = up * i + (right * j + corner);
 		}
 	}
 }
 
 
-double triangle_intersection(Point point, Point camera, Triangle triangle) 
+double Screen::triangle_intersection(Point point, Point camera, Triangle triangle) 
 {
 	MyVector orig(point);
 	MyVector dir(point, camera);
 	MyVector v0(triangle.v1);
 	MyVector v1(triangle.v2);
 	MyVector v2(triangle.v3);
+	//std::cout << v2.x << " " << v2.y << " " << v2.z << "\n";
 
 	MyVector e1 = v1 - v0;
 	MyVector e2 = v2 - v0;
