@@ -1,5 +1,6 @@
 #include "Parser.h"
 #include <iostream>
+using namespace std;
 std::vector<Triangle> Parser::parseFile(std::string filename)
 {
     std::vector<Triangle> triangles;
@@ -39,7 +40,6 @@ Point Parser::parseLine(std::string line)
 
     lineCopy.erase(0, lineCopy.find(" ") + 1);
     double z = stod(lineCopy);
-
     return Point(x, y, z);
 }
 
@@ -48,20 +48,11 @@ Triangle Parser::parseLine(std::string line, std::vector<Point> points)
     std::string lineCopy = line;
 
     lineCopy.erase(0, 2);
-    std::string pointStr = lineCopy.substr(0, line.find(" "));
-    pointStr = pointStr.substr(0, pointStr.find("/"));
-    int p1 = stoi(pointStr);
-
+    int p1 = stoi(lineCopy.substr(0, lineCopy.find("/")));
     lineCopy.erase(0, lineCopy.find(" ") + 1);
-    pointStr = lineCopy.substr(0, line.find(" "));
-    pointStr = pointStr.substr(0, pointStr.find("/"));
-    int p2 = stoi(pointStr);
-
+    int p2 = stoi(lineCopy.substr(0, lineCopy.find("/")));
     lineCopy.erase(0, lineCopy.find(" ") + 1);
-    pointStr = lineCopy.substr(0, line.find(" "));
-    pointStr = pointStr.substr(0, pointStr.find("/"));
-    
-    int p3 = stoi(pointStr);
+    int p3 = stoi(lineCopy);
     return Triangle(points[p1-1], points[p2-1], points[p3-1]);
 }
 
