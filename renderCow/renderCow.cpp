@@ -2,6 +2,7 @@
 #include "MyVector.h"
 #include "Triangle.h"
 #include "Screen.h"
+#include "Picture.h"
 
 int main()
 {
@@ -11,7 +12,7 @@ int main()
 	MyVector a(1, 1, 1);
 	double dist = 1;
 	Screen screen(a, camera, dist);
-	for (int i = 0; i < screen.pixels; i++)
+	/*for (int i = 0; i < screen.pixels; i++)
 	{
 		for (int j = 0; j < screen.pixels; j++)
 			if (screen.triangle_intersection(screen.points[i][j], camera, triangle) != 0)
@@ -19,14 +20,7 @@ int main()
 			else
 				std::cout << ".";
 		std::cout << "\n";
-	}
-	/*for (int i = 0; i < screen.height; i++)
-	{
-		for (int j = 0; j < screen.width; j++)
-			std::cout << screen.points[i][j].x << " " << screen.points[i][j].y << " " << screen.points[i][j].z << " " << i << " " << j << "\n";
 	}*/
-	//std::cout << screen.center.x << " " << screen.center.y << " " << screen.center.z << "\n";
-	 //std::cout << screen.triangle_intersection(screen.center, camera, triangle);
-	//::cout << screen.triangle_intersection(point, camera, triangle);
-	//std::cout << screen.right.x << " " << screen.right.y << " " << screen.right.z;
+	Picture pic;
+	pic.write_picture("D:\\mybmp.bmp");
 }

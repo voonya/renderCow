@@ -140,13 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MyVector.cpp" />
+    <ClCompile Include="Picture.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="renderCow.cpp" />
     <ClCompile Include="Screen.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BMPstruct.h" />
     <ClInclude Include="MyVector.h" />
+    <ClInclude Include="Picture.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Triangle.h" />
