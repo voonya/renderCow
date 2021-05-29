@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MyVector.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="renderCow.cpp" />
     <ClCompile Include="Screen.cpp" />
@@ -147,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyVector.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Triangle.h" />
