@@ -1,9 +1,9 @@
 #include "Picture.h"
 
-void  Picture:: write_picture(string file_name)
+void  Picture:: write_picture(string file_name, int**photo, int height1, int width1)
 {
-    int width = 80;
-    int height = 60;
+    int width = width1;
+    int height = height1;
     int size = width * height + 54;
     ofstream fout;
     fout.open(file_name, ios::binary);
@@ -37,9 +37,18 @@ void  Picture:: write_picture(string file_name)
         pixels[i] = new Pixel_triplet[width];
         for (int j = 0; j < width; j++)
         {
-            pixels[i][j].redComponent = 0;
-            pixels[i][j].blueComponent = 255;           
-            pixels[i][j].greenComponent = 0;
+            if (photo[i][j])
+            {
+                pixels[i][j].redComponent = 255;
+                pixels[i][j].blueComponent = 255;
+                pixels[i][j].greenComponent = 255;
+            }
+            else
+            {
+                pixels[i][j].redComponent = 0;
+                pixels[i][j].blueComponent = 0;
+                pixels[i][j].greenComponent = 0;
+            }
         }
     }
 

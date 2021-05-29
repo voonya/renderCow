@@ -2,6 +2,7 @@
 #include"Point.h"
 #include"MyVector.h"
 #include"Triangle.h"
+#include <vector>
 
 class Screen
 {
@@ -20,6 +21,6 @@ public:
 	MyVector right;
 	Screen(MyVector dir, Point camera, double dist1);
 	double triangle_intersection(Point point, Point camera, Triangle triangle);
-
+	int** getPhoto(std::vector<Triangle> tr, Point camera);
 };
 

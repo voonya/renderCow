@@ -8,6 +8,6 @@ class Picture
 	BMP_head head;
 	Pixel_triplet** pixels;
 public:
-	void write_picture(string);
+	void write_picture(string, int**, int, int);
 };
 

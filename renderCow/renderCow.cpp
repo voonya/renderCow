@@ -5,33 +5,21 @@
 #include "Parser.h"
 #include "Picture.h"
 
+Point getCenter(vector<Point> points);
+
 int main()
 {
 	Parser parser;
-	std::vector<Triangle> tr = parser.parseFile("s.obj");
-	Point camera(0, 0, 0);
+	std::vector<Point> points;
+	std::vector<Triangle> tr = parser.parseFile("s.obj", points);
+	Point camera(-1, -1, -1);
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
-	MyVector a(1, 1, 1);
-	double dist = 1;
+	MyVector a(camera, getCenter(points));
+	double dist = 100;
 	Screen screen(a, camera, dist);
-		for (int i = 0; i < screen.pixels; i++)
-		{
-			for (int j = 0; j < screen.pixels; j++) {
-				bool flag = false;
-				for (int k = 0; k < tr.size(); k++) {
-					if (screen.triangle_intersection(screen.points[i][j], camera, tr[k]) != 0)
-						flag = true;
-				}
-				if (flag) {
-					std::cout << "@";
-				}
-				else
-					std::cout << ".";
-				
-			}
-			std::cout << "\n";
-		}
+	int** photo;
+	photo = screen.getPhoto(tr, camera);
 	
 
 	/*for (int i = 0; i < screen.height; i++)
@@ -40,5 +28,20 @@ int main()
 			std::cout << screen.points[i][j].x << " " << screen.points[i][j].y << " " << screen.points[i][j].z << " " << i << " " << j << "\n";
 	}*/
 	Picture pic;
-	pic.write_picture("D:\\mybmp.bmp");
+	pic.write_picture("D:\\mybmp.bmp", photo, screen.pixels, screen.pixels);
+}
+
+Point getCenter(vector<Point> points)
+{
+	Point center(0, 0, 0);
+	for (int i = 0; i < points.size(); i++)
+	{
+		center.x = center.x + points[i].x;
+		center.y = center.y + points[i].y;
+		center.z = center.z + points[i].z;
+	}
+	center.x = center.x / points.size();
+	center.y = center.y / points.size();
+	center.z = center.z / points.size();
+	return center;
 }

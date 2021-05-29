@@ -1,10 +1,11 @@
 #include "Screen.h"
 #include <iostream>
 
+
 Screen::Screen(MyVector dir, Point camera, double dist1)
 {
-	height = 10;
-	width = 10;
+	height = 5;
+	width = 5;
 	pixels = 40;
 	double resolution = height / pixels;
 	dist = dist1;
@@ -14,7 +15,7 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	c = n.z;
 	d = dist;
 	double t;
-	t = -(a * dir.x + b * dir.y + c * dir.z) / (a * camera.x + b * camera.y + c * camera.z + d);
+	t = -(a * camera.x + b * camera.y + c * camera.z + d)/(a * dir.x + b * dir.y + c * dir.z);
 	center.x = camera.x + dir.x * t;
 	center.y = camera.y + dir.y * t;
 	center.z = camera.z + dir.z * t;
@@ -72,4 +73,28 @@ double Screen::triangle_intersection(Point point, Point camera, Triangle triangl
 		return 0;
 	}
 	return MyVector::dot(e2, qvec) * inv_det;
+}
+
+int** Screen::getPhoto(std::vector<Triangle> tr, Point camera)
+{
+	int** res = new int* [pixels];
+	for (int i = 0; i < pixels; i++)
+		res[i] = new int[pixels];
+	for (int i = 0; i < pixels; i++)
+	{
+		for (int j = 0; j < pixels; j++) {
+			bool flag = false;
+			for (int k = 0; k < tr.size(); k++) {
+				if (triangle_intersection(points[i][j], camera, tr[k]) != 0)
+					flag = true;
+			}
+			if (flag) {
+				res[i][j] = 1;
+			}
+			else
+				res[i][j] = 0;
+
+		}
+	}
+	return res;
 }
