@@ -18,7 +18,7 @@ public:
 	MyVector up;
 	MyVector right;
 	Screen(MyVector dir, Point camera, double dist1);
-	double triangle_intersection(Point point, Point camera, Triangle triangle);
+	//double triangle_intersection(Point point, Point camera, Triangle triangle);
 
 };
 

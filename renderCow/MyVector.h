@@ -13,8 +13,10 @@ public:
 	MyVector(double x1, double y1, double z1) { x = x1; y = y1; z = z1; };
 	MyVector getOrt();
 	static MyVector cross(MyVector vec1, MyVector vec2);
+	static double dot(MyVector vec1, MyVector vec2);
 	MyVector operator*(const double a);
-	MyVector operator+(const double a);
-	MyVector operator-(const double a);
+	Point operator+(const Point point);
+	MyVector operator+(const MyVector vec1);
+	MyVector operator-(const MyVector vec1);
 };
 

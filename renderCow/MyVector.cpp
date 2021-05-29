@@ -37,6 +37,15 @@ MyVector MyVector::operator*(const double a)
 	return vec;
 }
 
+Point MyVector::operator+(const Point point)
+{
+	Point point1;
+	point1.x = x + point.x;
+	point1.y = y + point.y;
+	point1.z = z + point.z;
+	return point1;
+}
+
 MyVector MyVector::operator+(const MyVector vec1)
 {
 	MyVector vec3;

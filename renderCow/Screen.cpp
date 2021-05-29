@@ -19,8 +19,8 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	right = (MyVector::cross(MyVector(0, 0, 1), dir)).getOrt();
 	up = (MyVector::cross(dir, right)).getOrt();
 	Point corner;
-	corner = center + right * (width / 2);
-	corner = corner + up * (-height / 2);
+	corner = right * (width / 2) + center;
+	corner = up * (-height / 2) + corner;
 	points = new Point * [height];
 	for (int i = 0; i < height; i++)
 	{
@@ -30,13 +30,14 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	for (int i = 0; i < height; i++)
 	{
 		if (i != 0)
-			points[i][0] = points[i - 1][0] + up;
+			points[i][0] = up + points[i - 1][0];
 		for (int j = 1; j < width; j++)
 		{
-			points[i][j] = points[i][j - 1] + right;
+			points[i][j] = right + points[i][j - 1];
 		}
 	}
 }
+
 
 double triangle_intersection(Point point, Point camera, Triangle triangle) 
 {
@@ -50,7 +51,7 @@ double triangle_intersection(Point point, Point camera, Triangle triangle)
 	MyVector e2 = v2 - v0;
 	// Вычисление вектора нормали к плоскости
 	MyVector pvec = MyVector::cross(dir, e2);
-	float det = dot(e1, pvec);
+	float det = MyVector::dot(e1, pvec);
 
 	// Луч параллелен плоскости
 	if (det < 1e-8 && det > -1e-8) {
@@ -59,15 +60,15 @@ double triangle_intersection(Point point, Point camera, Triangle triangle)
 
 	float inv_det = 1 / det;
 	MyVector tvec = orig - v0;
-	float u = dot(tvec, pvec) * inv_det;
+	float u = MyVector::dot(tvec, pvec) * inv_det;
 	if (u < 0 || u > 1) {
 		return 0;
 	}
 
 	MyVector qvec = MyVector::cross(tvec, e1);
-	float v = dot(dir, qvec) * inv_det;
+	float v = MyVector::dot(dir, qvec) * inv_det;
 	if (v < 0 || u + v > 1) {
 		return 0;
 	}
-	return dot(e2, qvec) * inv_det;
+	return MyVector::dot(e2, qvec) * inv_det;
 }
