@@ -3,6 +3,8 @@
 #include "Triangle.h"
 #include "Screen.h"
 #include "Parser.h"
+#include "Picture.h"
+
 int main()
 {
 	Parser parser;
@@ -37,8 +39,6 @@ int main()
 		for (int j = 0; j < screen.width; j++)
 			std::cout << screen.points[i][j].x << " " << screen.points[i][j].y << " " << screen.points[i][j].z << " " << i << " " << j << "\n";
 	}*/
-	//std::cout << screen.center.x << " " << screen.center.y << " " << screen.center.z << "\n";
-	 //std::cout << screen.triangle_intersection(screen.center, camera, triangle);
-	//::cout << screen.triangle_intersection(point, camera, triangle);
-	//std::cout << screen.right.x << " " << screen.right.y << " " << screen.right.z;
+	Picture pic;
+	pic.write_picture("D:\\mybmp.bmp");
 }
