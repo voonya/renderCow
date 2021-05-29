@@ -1,9 +1,10 @@
 #include "Parser.h"
 #include <iostream>
 using namespace std;
-std::vector<Triangle> Parser::parseFile(std::string filename, vector<Point> points)
+std::vector<Triangle> Parser::parseFile(std::string filename, vector<Point>& p)
 {
     std::vector<Triangle> triangles;
+    std::vector<Point> points;
     std::ifstream file(getPath(filename));
     std::string line;
     if (file.is_open()) {
@@ -22,7 +23,7 @@ std::vector<Triangle> Parser::parseFile(std::string filename, vector<Point> poin
     else {
         std::cout << "Cant read the file\n";
     }
-
+    p = points;
 
     return triangles;
 }
