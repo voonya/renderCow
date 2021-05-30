@@ -10,10 +10,10 @@ Point getCenter(vector<Point> points);
 
 int main()
 {
-	/*Parser parser;
+	Parser parser;
 	std::vector<Point> points;
 	std::vector<Triangle> tr = parser.parseFile("cow.obj", points);
-	Point light(1, 1, 1);
+	/*Point light(1, 1, 1);
 	Point camera(0, -1, 0);
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
@@ -31,11 +31,9 @@ int main()
 	}
 	Picture pic;
 	pic.write_picture("D:\\mybmp.bmp", photo, screen.pixels, screen.pixels);*/
-	Box box(Point(0,0,0), Point(1,1,1));
-	Triangle triangle(Point(2, 2, 2), Point(3, 3, 3), Point(2, 3, 3));
-	vector<Triangle> tr;
-	tr.push_back(triangle);
+	Box box(Point(-10,-10,-10), Point(10,10,10));
 	OctoTree oct(box, tr);
+	cout << oct.root->triangles[1].v3.x;
 }
 
 Point getCenter(vector<Point> points)

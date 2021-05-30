@@ -22,11 +22,11 @@ struct Node
 
 class OctoTree
 {
+public:
 	int count_tr = 10;
 	float min_size = 0.001;
 	Node* root;
-public:
 	OctoTree(Box box, vector<Triangle> tr);
-	void divCube(Node root);
-	bool IsFaceInsideBox(Triangle f, Box box);
+	void divCube(Node*& root);
+	bool isTriangleIn(Triangle f, Box box);
 };
