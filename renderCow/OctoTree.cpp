@@ -3,8 +3,14 @@
 
 OctoTree::OctoTree(Box box, vector<Triangle> tr)
 {
+    Box box1(Point(0, 0, 0), Point(10, 10, 10));
+    Triangle tr12(Point(0, 0, 1), Point(0, 1, 0), Point(1, 0, 0));
+
+   // if (isTriangleIn(tr12, box1))
+  //      cout << "Yeah";
 	root = new Node(box, tr);
     divCube(root);
+    
 }
 
 void OctoTree::divCube(Node*& root)
@@ -46,13 +52,17 @@ void OctoTree::divCube(Node*& root)
     Point point88(center.x, root->box.max.y, root->box.max.z);
     boxes.push_back(Box(point88, point8));
 
+    
+
     for (int j = 0; j < boxes.size(); j++)
     {
         vector<Triangle> tr1;
         //cout << root->triangles.size() << endl;
         for (int i = 0; i < root->triangles.size(); i++)
+        {
             if (isTriangleIn(root->triangles[i], boxes[j]))
                 tr1.push_back(root->triangles[i]);
+        }
         root->ptr_node[j] = new Node(boxes[j], tr1);
     }
 
@@ -94,7 +104,7 @@ bool OctoTree::isTriangleIn(Triangle f, Box box)
     float r = e1 * abs(f0.z) + e2 * abs(f0.y);
     if (max(-max(p2, max(p0, p1)), min(min(p0, p1), p2)) > r)
     {
- 
+        
         return false;
     }
 
@@ -198,7 +208,7 @@ bool OctoTree::isTriangleIn(Triangle f, Box box)
     }
 
     MyVector a22;
-    a22.x = -f2.z;
+    a22.x = -f2.y;
     a22.y = f2.x;
     a22.z = 0;
 
