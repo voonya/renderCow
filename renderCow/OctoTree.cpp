@@ -13,78 +13,59 @@ void OctoTree::divCube(Node*& root)
 	center.x = (root->box.max.x + root->box.min.x) / 2;
 	center.y = (root->box.max.y + root->box.min.y) / 2;
 	center.z = (root->box.max.z + root->box.min.z) / 2;
-	Box box1(center, root->box.max);
-    vector<Triangle> tr1;
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box1))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[0] = new Node(box1, tr1);
-    tr1.clear();
+    vector<Box> boxes;
+	boxes.push_back(Box(center, root->box.max));
 
-	Box box2(center, root->box.min);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box2))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[1] = new Node(box2, tr1);
-    tr1.clear();
+    boxes.push_back(Box(center, root->box.min));
 
-	Point point3(root->box.min.x, root->box.max.y, root->box.min.z);
-	Box box3(center, point3);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box3))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[2] = new Node(box3, tr1);
-    tr1.clear();
+	Point point3(root->box.min.x, center.y, root->box.min.z);
+    Point point33(center.x, root->box.max.y, center.z);
+    boxes.push_back(Box(point3, point33));
 
-	Point point4(root->box.max.x, root->box.max.y, root->box.min.z);
-	Box box4(center, point4);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box4))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[3] = new Node(box4, tr1);
-    tr1.clear();
+	Point point4(root->box.max.x, root->box.max.y, center.z);
+    Point point44(center.x, center.y, root->box.min.z);
+    boxes.push_back(Box(point4, point44));
 
-	Point point5(root->box.max.x, root->box.min.y, root->box.min.z);
-	Box box5(center, point5);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box5))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[4] = new Node(box5, tr1);
-    tr1.clear();
 
-	Point point6(root->box.min.x, root->box.max.y, root->box.max.z);
-	Box box6(center, point6);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box6))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[5] = new Node(box6, tr1);
-    tr1.clear();
+	Point point5(center.x, root->box.min.y, root->box.min.z);
+    Point point55(root->box.max.x, center.y, center.z);
+    boxes.push_back(Box(point55, point5));
 
-	Point point7(root->box.max.x, root->box.min.y, root->box.max.z);
-	Box box7(center, point7);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box7))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[6] = new Node(box7, tr1);
-    tr1.clear();
 
-	Point point8(root->box.min.x, root->box.min.y, root->box.max.z);
-	Box box8(center, point8);
-    for (int i = 0; i < root->triangles.size(); i++)
-        if (isTriangleIn(root->triangles[i], box8))
-            tr1.push_back(root->triangles[i]);
-    root->ptr_node[7] = new Node(box8, tr1);
-    tr1.clear();
+	Point point6(center.x, root->box.min.y, center.z);
+    Point point66(root->box.max.x, center.y, root->box.max.z);
+    boxes.push_back(Box(point66, point6));
+
+
+	Point point7(root->box.min.x, root->box.min.y, center.z);
+    Point point77(center.x, center.y, root->box.max.z);
+    boxes.push_back(Box(point77, point7));
+
+
+	Point point8(root->box.min.x, center.y, center.z);
+    Point point88(center.x, root->box.max.y, root->box.max.z);
+    boxes.push_back(Box(point88, point8));
+
+    for (int j = 0; j < boxes.size(); j++)
+    {
+        vector<Triangle> tr1;
+        //cout << root->triangles.size() << endl;
+        for (int i = 0; i < root->triangles.size(); i++)
+            if (isTriangleIn(root->triangles[i], boxes[j]))
+                tr1.push_back(root->triangles[i]);
+        root->ptr_node[j] = new Node(boxes[j], tr1);
+    }
 
    // root->triangles.clear();
 
     for (int i = 0; i < 8; i++)
     {
-        if ((root->ptr_node[i]->triangles.size() > 10) && (root->ptr_node[i]->box.max.x - root->ptr_node[i]->box.min.x > 0.001))
+        if ((root->ptr_node[i]->triangles.size() > 10) && (root->ptr_node[i]->box.max.x - root->ptr_node[i]->box.min.x > 0.0001))
             divCube(root->ptr_node[i]);
     } 
 }
 
+//
 
 bool OctoTree::isTriangleIn(Triangle f, Box box)
 {
