@@ -3,11 +3,11 @@
 #include "MyVector.h"
 class Box
 {
+	
+public:
 	Point min;
 	Point max;
-public:
-	Box();
+	Box() {};
 	Box(Point min1, Point max1);
-	Point getMin()
 };
 

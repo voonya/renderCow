@@ -1,1 +1,210 @@
 #include "OctoTree.h"
+#include <iostream>
+
+OctoTree::OctoTree(Box box, vector<Triangle> tr)
+{
+	root = new Node(box, tr);
+}
+
+void OctoTree::divCube(Node root)
+{
+	Point center;
+	center.x = (root.box.max.x + root.box.min.x) / 2;
+	center.y = (root.box.max.y + root.box.min.y) / 2;
+	center.z = (root.box.max.z + root.box.min.z) / 2;
+	Box box1(center, root.box.max);
+
+	Box box2(center, root.box.min);
+
+	Point point3(root.box.min.x, root.box.max.y, root.box.min.z);
+	Box box3(center, point3);
+
+	Point point4(root.box.max.x, root.box.max.y, root.box.min.z);
+	Box box4(center, point4);
+
+	Point point5(root.box.max.x, root.box.min.y, root.box.min.z);
+	Box box5(center, point5);
+
+	Point point6(root.box.min.x, root.box.max.y, root.box.max.z);
+	Box box6(center, point6);
+
+	Point point7(root.box.max.x, root.box.min.y, root.box.max.z);
+	Box box7(center, point7);
+
+	Point point8(root.box.min.x, root.box.min.y, root.box.max.z);
+	Box box8(center, point8);
+
+
+}
+
+
+bool OctoTree::isTriangleIn(Triangle f, Box box)
+{
+    MyVector c = (MyVector(box.min) + MyVector(box.max)) * 0.5;
+    //cout << MyVector(box.max).x << " " << MyVector(box.max).y << " " << MyVector(box.max).z;
+    float e0 = (box.max.x - box.min.x) * 0.5;
+    float e1 = (box.max.y - box.min.y) * 0.5;
+    float e2 = (box.max.z - box.min.z) * 0.5;
+
+    MyVector v0 = MyVector(f.v1) - c;
+    MyVector v1 = MyVector(f.v2) - c;
+    MyVector v2 = MyVector(f.v3) - c;
+
+    MyVector f0 = MyVector(f.v2) - MyVector(f.v1);
+    MyVector f1 = MyVector(f.v3) - MyVector(f.v2);
+    MyVector f2 = MyVector(f.v1) - MyVector(f.v3);
+
+    MyVector a00;
+    a00.x = 0;
+    a00.y = -f0.z;
+    a00.z = f0.y;
+
+    float p0 = MyVector::dot(v0, a00);
+    float p1 = MyVector::dot(v1, a00);
+    float p2 = MyVector::dot(v2, a00);
+    float r = e1 * abs(f0.z) + e2 * abs(f0.y);
+    if (max(-max(p2, max(p0, p1)), min(min(p0, p1), p2)) > r)
+    {
+ 
+        return false;
+    }
+
+    MyVector a01;
+    a01.x = 0;
+    a01.y = -f1.z;
+    a01.z = f1.y;
+
+    p0 = MyVector::dot(v0, a01);
+    p1 = MyVector::dot(v1, a01);
+    p2 = MyVector::dot(v2, a01);
+    r = e1 * abs(f1.z) + e2 * abs(f1.y);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+
+    MyVector a02;
+    a02.x = 0;
+    a02.y = -f2.z;
+    a02.z = f2.y;
+
+    p0 = MyVector::dot(v0, a02);
+    p1 = MyVector::dot(v1, a02);
+    p2 = MyVector::dot(v2, a02);
+    r = e1 * abs(f2.z) + e2 * abs(f2.y);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+    MyVector a10;
+    a10.x = f0.z;
+    a10.y = 0;
+    a10.z = -f0.x;
+
+    p0 = MyVector::dot(v0, a10);
+    p1 = MyVector::dot(v1, a10);
+    p2 = MyVector::dot(v2, a10);
+    r = e0 * abs(f0.z) + e2 * abs(f0.x);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+    MyVector a11;
+    a11.x = f1.z;
+    a11.y = 0;
+    a11.z = -f1.x;
+
+    p0 = MyVector::dot(v0, a11);
+    p1 = MyVector::dot(v1, a11);
+    p2 = MyVector::dot(v2, a11);
+    r = e0 * abs(f1.z) + e2 * abs(f1.x);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+    MyVector a12;
+    a12.x = f2.z;
+    a12.y = 0;
+    a12.z = -f2.x;
+
+    p0 = MyVector::dot(v0, a12);
+    p1 = MyVector::dot(v1, a12);
+    p2 = MyVector::dot(v2, a12);
+    r = e0 * abs(f2.z) + e2 * abs(f2.x);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+    MyVector a20;
+    a20.x = -f0.y;
+    a20.y = f0.x;
+    a20.z = 0;
+
+    p0 = MyVector::dot(v0, a20);
+    p1 = MyVector::dot(v1, a20);
+    p2 = MyVector::dot(v2, a20);
+    r = e0 * abs(f0.y) + e1 * abs(f0.x);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+    MyVector a21;
+    a21.x = -f1.y;
+    a21.y = f1.x;
+    a21.z = 0;
+
+    p0 = MyVector::dot(v0, a21);
+    p1 = MyVector::dot(v1, a21);
+    p2 = MyVector::dot(v2, a21);
+    r = e0 * abs(f1.y) + e1 * abs(f1.x);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+    MyVector a22;
+    a22.x = -f2.z;
+    a22.y = f2.x;
+    a22.z = 0;
+
+    p0 = MyVector::dot(v0, a22);
+    p1 = MyVector::dot(v1, a22);
+    p2 = MyVector::dot(v2, a22);
+    r = e0 * abs(f2.y) + e1 * abs(f2.x);
+    if (max(-max(p0, max(p1, p2)), min(min(p0, p1), p2)) > r)
+    {
+        return false;
+    }
+
+
+    if (max(v0.x, max(v1.x, v2.x)) < -e0 || min(v0.x, min(v1.x, v2.x)) > e0)
+    {
+        return false;
+    }
+
+    if (max(v0.y, max(v1.y, v2.y)) < -e1 || min(v0.y, min(v1.y, v2.y)) > e1)
+    {
+        return false;
+    }
+
+    if (max(v0.z, max(v1.z, v2.z)) < -e2 || min(v0.z, min(v1.z, v2.z)) > e2)
+    {
+        return false;
+    }
+
+    /*Vector3 plane_normal = Vector3.Cross(f0, f1);
+    float plane_distance = Vector3.Dot(plane_normal, f.Points[0]);
+
+    r = e0 * Math.Abs(plane_normal.X) + e1 * Math.Abs(plane_normal.Y) +
+        e2 * Math.Abs(plane_normal.Z);
+
+    if (plane_distance - Math.Sqrt(Math.Pow(c.X, 2) + Math.Pow(c.Y, 2) + Math.Pow(c.Z, 2)) > r) return false;*/
+
+    return true;
+}

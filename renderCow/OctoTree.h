@@ -2,21 +2,31 @@
 #include <vector>
 #include "Box.h"
 #include "Triangle.h"
+
 using namespace std;
-class OctoTree
-{
-	Node* root;
-public:
-	OctoTree();
-};
 
 struct Node
 {
-	int count_tr = 10;
-	float min_size = 0.001;
 	Box box;
 	vector<Triangle> triangles;
 	Node* ptr_node[8];
-	Node(Box region, vector<Triangle> tr) { box = region; triangles = tr;}
-	Node();
+	Node(Box region, vector<Triangle> tr)
+	{
+		box = region;
+		triangles = tr;
+		for (int i = 0; i < 8; i++)
+			ptr_node[i] = nullptr;
+	}
+	//Node();
+};
+
+class OctoTree
+{
+	int count_tr = 10;
+	float min_size = 0.001;
+	Node* root;
+public:
+	OctoTree(Box box, vector<Triangle> tr);
+	void divCube(Node root);
+	bool IsFaceInsideBox(Triangle f, Box box);
 };
