@@ -6,7 +6,8 @@ class Box
 	Point min;
 	Point max;
 public:
+	Box();
 	Box(Point min1, Point max1);
-
+	Point getMin()
 };
 
