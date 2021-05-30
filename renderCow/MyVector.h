@@ -1,5 +1,6 @@
 #pragma once
 #include"Point.h"
+#include <cmath>
 
 class MyVector
 {
@@ -18,5 +19,6 @@ public:
 	Point operator+(const Point point);
 	MyVector operator+(const MyVector vec1);
 	MyVector operator-(const MyVector vec1);
+	float lenght();
 };
 

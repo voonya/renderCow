@@ -63,3 +63,10 @@ MyVector MyVector::operator-(const MyVector vec1)
 	vec3.z = z - vec1.z;
 	return vec3;
 }
+
+float MyVector::lenght()
+{
+	float len;
+	len = sqrt(x * x + y * y + z * z );
+	return len;
+}

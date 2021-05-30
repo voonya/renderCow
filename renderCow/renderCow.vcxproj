@@ -141,6 +141,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="MyVector.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Picture.cpp" />
@@ -151,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMPstruct.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="MyVector.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Picture.h" />
