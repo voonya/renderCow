@@ -1,6 +1,11 @@
 #include "MyVector.h"
 #include <Math.h>
 
+double MyVector::getLength()
+{
+	return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+}
+
 MyVector MyVector::getOrt()
 {
 	MyVector ort;

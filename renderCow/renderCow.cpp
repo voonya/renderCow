@@ -11,15 +11,16 @@ int main()
 {
 	Parser parser;
 	std::vector<Point> points;
-	std::vector<Triangle> tr = parser.parseFile("s.obj", points);
-	Point camera(-1, -1, -1);
+	std::vector<Triangle> tr = parser.parseFile("cow.obj", points);
+	Point light(1, 1, 1);
+	Point camera(0, -1, 0);
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
 	MyVector a(camera, getCenter(points));
-	double dist = 100;
+	double dist = 4.5;
 	Screen screen(a, camera, dist);
-	int** photo;
-	photo = screen.getPhoto(tr, camera);
+	double** photo;
+	photo = screen.getPhoto(tr, camera, light);
 	
 
 	/*for (int i = 0; i < screen.height; i++)

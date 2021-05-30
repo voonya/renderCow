@@ -1,6 +1,6 @@
 #include "Picture.h"
 
-void  Picture:: write_picture(string file_name, int**photo, int height1, int width1)
+void  Picture:: write_picture(string file_name, double**photo, int height1, int width1)
 {
     int width = width1;
     int height = height1;
@@ -37,11 +37,11 @@ void  Picture:: write_picture(string file_name, int**photo, int height1, int wid
         pixels[i] = new Pixel_triplet[width];
         for (int j = 0; j < width; j++)
         {
-            if (photo[i][j])
+            if (photo[i][j] != 0)
             {
-                pixels[i][j].redComponent = 255;
-                pixels[i][j].blueComponent = 255;
-                pixels[i][j].greenComponent = 255;
+                pixels[i][j].redComponent = 255 * photo[i][j];
+                pixels[i][j].blueComponent = 255 * photo[i][j];
+                pixels[i][j].greenComponent = 255 * photo[i][j];
             }
             else
             {

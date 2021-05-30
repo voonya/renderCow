@@ -21,6 +21,6 @@ public:
 	MyVector right;
 	Screen(MyVector dir, Point camera, double dist1);
 	double triangle_intersection(Point point, Point camera, Triangle triangle);
-	int** getPhoto(std::vector<Triangle> tr, Point camera);
+	double** getPhoto(std::vector<Triangle> tr, Point camera, Point light);
 };
 
