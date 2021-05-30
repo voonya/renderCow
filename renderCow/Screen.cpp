@@ -4,9 +4,9 @@
 
 Screen::Screen(MyVector dir, Point camera, double dist1)
 {
-	height = 5;
-	width = 5;
-	pixels = 40;
+	height = 6;
+	width = 6;
+	pixels = 600;
 	double resolution = height / pixels;
 	dist = dist1;
 	MyVector n = dir.getOrt();
@@ -75,21 +75,37 @@ double Screen::triangle_intersection(Point point, Point camera, Triangle triangl
 	return MyVector::dot(e2, qvec) * inv_det;
 }
 
-int** Screen::getPhoto(std::vector<Triangle> tr, Point camera)
+double** Screen::getPhoto(std::vector<Triangle> tr, Point camera, Point light)
 {
-	int** res = new int* [pixels];
+	double** res = new double* [pixels];
 	for (int i = 0; i < pixels; i++)
-		res[i] = new int[pixels];
+		res[i] = new double[pixels];
+	Point minPoint;
 	for (int i = 0; i < pixels; i++)
 	{
-		for (int j = 0; j < pixels; j++) {
+		for (int j = 0; j < pixels; j++) 
+		{
+			double min = 1000;
+			int minTriangle;
 			bool flag = false;
-			for (int k = 0; k < tr.size(); k++) {
-				if (triangle_intersection(points[i][j], camera, tr[k]) != 0)
-					flag = true;
+			for (int k = 0; k < tr.size(); k++) 
+			{
+				double dist = triangle_intersection(points[i][j], camera, tr[k]);
+				if ( dist != 0)
+				{
+					if (dist < min)
+					{
+						minTriangle = k;
+						flag = true;
+						min = dist;
+					}
+				}
 			}
-			if (flag) {
-				res[i][j] = 1;
+			if (flag) 
+			{
+				MyVector toSun(points[i][j], light);
+				MyVector n = MyVector::cross(MyVector(tr[minTriangle].v1, tr[minTriangle].v2), MyVector(tr[minTriangle].v1, tr[minTriangle].v3));
+				res[i][j] = abs(MyVector::dot(toSun, n))/(n.getLength()*toSun.getLength());
 			}
 			else
 				res[i][j] = 0;
