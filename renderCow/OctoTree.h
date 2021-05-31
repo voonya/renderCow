@@ -2,6 +2,7 @@
 #include <vector>
 #include "Box.h"
 #include "Triangle.h"
+#include "Screen.h"
 
 using namespace std;
 
@@ -30,4 +31,5 @@ public:
 	void divCube(Node*& root);
 	bool isTriangleIn(Triangle f, Box box);
 	int IntersectRayAABB(Point p, MyVector vec, Box a, float& t);
+	void findMinIntersection(Point p, Point camera, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root);
 };

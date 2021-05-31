@@ -6,7 +6,7 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 {
 	height = 6;
 	width = 6;
-	pixels = 600;
+	pixels = 60;
 	double resolution = height / pixels;
 	dist = dist1;
 	MyVector n = dir.getOrt();
