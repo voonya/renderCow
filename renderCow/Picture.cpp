@@ -51,7 +51,8 @@ void  Picture:: write_picture(string file_name, double**photo, int height1, int 
             }
         }
     }
-
+    reflectionVertical();
+    reflection_horizontal();
     for (int i = 0; i < head.height; i++)
     {
         for (int j = 0; j < head.width; j++)
@@ -66,4 +67,40 @@ void  Picture:: write_picture(string file_name, double**photo, int height1, int 
     }
     
     fout.close();
+}
+
+void Picture::reflectionVertical()
+{
+    Pixel_triplet** new_pixels = new Pixel_triplet * [head.height];
+    for (int i = 0; i < head.height; i++)
+        new_pixels[i] = new Pixel_triplet[head.width];
+    for (int i = 0; i < head.height; i++)
+    {
+        new_pixels[i] = pixels[head.height - i - 1];
+    }
+
+    pixels = new_pixels;
+    new_pixels = nullptr;
+}
+
+void Picture::reflection_horizontal()
+{
+    Pixel_triplet** new_pixels = new Pixel_triplet * [head.height];
+    for (int i = 0; i < head.height; i++)
+        new_pixels[i] = new Pixel_triplet[head.width];
+
+    for (int i = 0; i < head.height; i++)
+    {
+        for (int j = 0; j < head.width; j++)
+        {
+            new_pixels[i][j] = pixels[i][head.width - j - 1];
+        }
+    }
+
+    for (int i = 0; i < head.height; i++)
+        delete[] pixels[i];
+    delete[] pixels;
+
+    pixels = new_pixels;
+    new_pixels = nullptr;
 }

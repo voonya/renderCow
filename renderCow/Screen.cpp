@@ -6,9 +6,10 @@
 Screen::Screen(MyVector dir, Point camera, double dist1)
 {
 	height = 6;
-	width = 6;
-	pixels = 600;
-	double resolution = height / pixels;
+	width = 8;
+	pixelsH = 600;
+	pixelsW = 800;
+	double resolution = height / pixelsH;
 	dist = dist1;
 	MyVector n = dir.getOrt();
 	a = n.x;
@@ -25,15 +26,15 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	Point corner;
 	corner = right * (-width / 2) + center;
 	corner = up * (-height / 2) + corner;
-	points = new Point * [pixels];
-	for (int i = 0; i < pixels; i++)
+	points = new Point * [pixelsH];
+	for (int i = 0; i < pixelsH; i++)
 	{
-		points[i] = new Point[pixels];
+		points[i] = new Point[pixelsW];
 	}
 	points[0][0] = corner;
-	for (int i = 0; i < pixels; i++)
+	for (int i = 0; i < pixelsH; i++)
 	{
-		for (int j = 0; j < pixels; j++)
+		for (int j = 0; j < pixelsW; j++)
 		{
 			points[i][j] = up * i * resolution + (right * j * resolution + corner);
 		}
@@ -78,13 +79,13 @@ double Screen::triangle_intersection(Point point, Point camera, Triangle triangl
 
 double** Screen::getPhoto(std::vector<Triangle> tr, Point camera, Point light)
 {
-	double** res = new double* [pixels];
-	for (int i = 0; i < pixels; i++)
-		res[i] = new double[pixels];
+	double** res = new double* [pixelsH];
+	for (int i = 0; i < pixelsH; i++)
+		res[i] = new double[pixelsW];
 	Point minPoint;
-	for (int i = 0; i < pixels; i++)
+	for (int i = 0; i < pixelsH; i++)
 	{
-		for (int j = 0; j < pixels; j++) 
+		for (int j = 0; j < pixelsW; j++) 
 		{
 			double min = 1000;
 			int minTriangle;

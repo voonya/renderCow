@@ -9,5 +9,7 @@ class Picture
 	Pixel_triplet** pixels;
 public:
 	void write_picture(string, double**, int, int);
+	void reflection_horizontal();
+	void reflectionVertical();
 };
 

@@ -64,6 +64,8 @@ void OctoTree::divCube(Node*& root)
         if ((root->ptr_node[i]->triangles.size() > 10) && (root->ptr_node[i]->box.max.x - root->ptr_node[i]->box.min.x > 0.0001))
             divCube(root->ptr_node[i]);
     } 
+    if (root->ptr_node[0] || root->ptr_node[1] || root->ptr_node[2] || root->ptr_node[3] || root->ptr_node[4] || root->ptr_node[5] || root->ptr_node[6] || root->ptr_node[7])
+        root->triangles.clear();
 }
 
 //
@@ -268,13 +270,20 @@ int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& t)
 void OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
 {
     float t;
-    if (IntersectRayAABB(p, vec, root->box, t) && (!root->triangles.empty()))
+    bool fl = true;
+    for (int i = 0; i < 8; i++)
+        if (root->ptr_node[i] != nullptr)
+            fl = false;
+    if (fl && root->triangles.size() == 0)
+        return;
+
+    if (IntersectRayAABB(p, vec, root->box, t))
     {
         for (int i = 0; i < 8; i++)
         {
-            if ((root->ptr_node[i] != nullptr)  && (!root->ptr_node[i]->triangles.empty()))
+            if ((root->ptr_node[i] != nullptr))
             {
-                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 15) {
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() == 0) {
                     findMinIntersection(p, camera, vec, minTriangle, currentMin, root->ptr_node[i]);
                 }
                 else if(IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)){
