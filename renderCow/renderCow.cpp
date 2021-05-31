@@ -37,11 +37,13 @@ int main()
 	OctoTree oct(box, tr);
 	Box box1(Point(0, 0, 0), Point(1, 1, 1));
 	Point p(-1, -1, -1);
-	MyVector a(-1, -1, -1);
+	MyVector a(1, 1, 1);
 	float dist;
 	Point q;
 	//oct.IntersectRayAABB(p, a, box1, dist, q);
-	cout << oct.IntersectRayAABB(p, a, box1, dist, q);;
+	if (oct.IntersectRayAABB(p, a.getOrt(), box1, dist))
+		cout << "Yeah";
+
 
 }
 

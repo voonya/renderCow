@@ -29,5 +29,5 @@ public:
 	OctoTree(Box box, vector<Triangle> tr);
 	void divCube(Node*& root);
 	bool isTriangleIn(Triangle f, Box box);
-	int IntersectRayAABB(Point p, MyVector d, Box a, float& tmin, Point& q);
+	int IntersectRayAABB(Point p, MyVector vec, Box a, float& t);
 };
