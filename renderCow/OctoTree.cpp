@@ -3,14 +3,8 @@
 
 OctoTree::OctoTree(Box box, vector<Triangle> tr)
 {
-    Box box1(Point(0, 0, 0), Point(10, 10, 10));
-    Triangle tr12(Point(0, 0, 1), Point(0, 1, 0), Point(1, 0, 0));
-
-   // if (isTriangleIn(tr12, box1))
-  //      cout << "Yeah";
 	root = new Node(box, tr);
-    divCube(root);
-    
+    divCube(root); 
 }
 
 void OctoTree::divCube(Node*& root)
@@ -57,7 +51,6 @@ void OctoTree::divCube(Node*& root)
     for (int j = 0; j < boxes.size(); j++)
     {
         vector<Triangle> tr1;
-        //cout << root->triangles.size() << endl;
         for (int i = 0; i < root->triangles.size(); i++)
         {
             if (isTriangleIn(root->triangles[i], boxes[j]))
@@ -65,8 +58,6 @@ void OctoTree::divCube(Node*& root)
         }
         root->ptr_node[j] = new Node(boxes[j], tr1);
     }
-
-   // root->triangles.clear();
 
     for (int i = 0; i < 8; i++)
     {
@@ -80,7 +71,6 @@ void OctoTree::divCube(Node*& root)
 bool OctoTree::isTriangleIn(Triangle f, Box box)
 {
     MyVector c = (MyVector(box.min) + MyVector(box.max)) * 0.5;
-    //cout << MyVector(box.max).x << " " << MyVector(box.max).y << " " << MyVector(box.max).z;
     float e0 = (box.max.x - box.min.x) * 0.5;
     float e1 = (box.max.y - box.min.y) * 0.5;
     float e2 = (box.max.z - box.min.z) * 0.5;
@@ -237,4 +227,71 @@ bool OctoTree::isTriangleIn(Triangle f, Box box)
         return false;
     }
     return true;
+}
+
+int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& tmin, Point& q)
+{
+    tmin = 0.0f; // set to -FLT_MAX to get first hit on line
+    float tmax = 100000; // set to max distance ray can travel (for segment)
+
+    double EPSILON = 0.000001;
+    if (abs(vec.x) < EPSILON) 
+    {
+        if (p.x < a.min.x || p.x > a.max.x) 
+            return 0;
+    }
+    else 
+    {
+        float ood = 1.0 / vec.x;
+        float t1 = (a.min.x - p.x) * ood;
+        float t2 = (a.max.x - p.x) * ood;
+        if (t1 > t2) 
+            swap(t1, t2);
+        if (t1 > tmin) 
+            tmin = t1;
+        if (t2 > tmax) 
+            tmax = t2;
+        if (tmin > tmax) 
+            return 0;
+    }
+    if (abs(vec.y) < EPSILON)
+    {
+        if (p.y < a.min.y || p.y > a.max.y)
+            return 0;
+    }
+    else
+    {
+        float ood = 1.0 / vec.y;
+        float t1 = (a.min.y - p.y) * ood;
+        float t2 = (a.max.y - p.y) * ood;
+        if (t1 > t2)
+            swap(t1, t2);
+        if (t1 > tmin) 
+            tmin = t1;
+        if (t2 > tmax) 
+            tmax = t2;
+        if (tmin > tmax) 
+            return 0;
+    }
+    if (abs(vec.z) < EPSILON)
+    {
+        if (p.z < a.min.z || p.z > a.max.z)
+            return 0;
+    }
+    else
+    {
+        float ood = 1.0 / vec.z;
+        float t1 = (a.min.z - p.z) * ood;
+        float t2 = (a.max.z - p.z) * ood;
+        if (t1 > t2)
+            swap(t1, t2);
+        if (t1 > tmin) 
+            tmin = t1;
+        if (t2 > tmax) 
+            tmax = t2;
+        if (tmin > tmax) 
+            return 0;
+    }
+    q = vec * tmin + p;
+    return 1;
 }

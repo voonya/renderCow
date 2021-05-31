@@ -12,7 +12,7 @@ int main()
 {
 	Parser parser;
 	std::vector<Point> points;
-	std::vector<Triangle> tr = parser.parseFile("cow.obj", points);
+	std::vector<Triangle> tr = parser.parseFile("s.obj", points);
 	/*Point light(1, 1, 1);
 	Point camera(0, -1, 0);
 	Point point(0, 0, 1);
@@ -32,12 +32,17 @@ int main()
 	Picture pic;
 	pic.write_picture("D:\\mybmp.bmp", photo, screen.pixels, screen.pixels);*/
 	Box box(Point(-10,-10,-10), Point(10,10,10));
-	Box box1(Point(0, 0, 0), Point(10, 10, 10));
-	Triangle tr12(Point(0, 0, 1), Point(0, 1, 0), Point(1, 0, 0));
+	//Box box1(Point(0, 0, 0), Point(10, 10, 10));
+	//Triangle tr12(Point(0, 0, 1), Point(0, 1, 0), Point(1, 0, 0));
 	OctoTree oct(box, tr);
-	//if (oct.isTriangleIn(tr12, box1))
-	//	cout << "!";
-	//cout << oct.root->triangles[1].v3.x;
+	Box box1(Point(0, 0, 0), Point(1, 1, 1));
+	Point p(-1, -1, -1);
+	MyVector a(-1, -1, -1);
+	float dist;
+	Point q;
+	//oct.IntersectRayAABB(p, a, box1, dist, q);
+	cout << oct.IntersectRayAABB(p, a, box1, dist, q);;
+
 }
 
 Point getCenter(vector<Point> points)
