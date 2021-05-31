@@ -267,7 +267,7 @@ int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& t)
     return true;
 }
 
-void OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
+bool OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
 {
     float t;
     bool fl = true;
@@ -275,15 +275,28 @@ void OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle
         if (root->ptr_node[i] != nullptr)
             fl = false;
     if (fl && root->triangles.size() == 0)
-        return;
+        return false;
 
-    if (IntersectRayAABB(p, vec, root->box, t))
+    //if (IntersectRayAABB(p, vec, root->box, t))
     {
+        //if (root->triangles.size() != 0)
+            //cout << root->triangles.size() << endl;
+        for (int j = 0; j < root->triangles.size(); j++)
+        {
+            double dist = Screen::triangle_intersection(p, camera, root->triangles[j]);
+            if ((dist != 0) && (dist < currentMin))
+            {
+                currentMin = dist;
+                minTriangle = root->triangles[j];
+            }
+        }
         for (int i = 0; i < 8; i++)
         {
-            if ((root->ptr_node[i] != nullptr))
+            if ((root->ptr_node[i] != nullptr)&& IntersectRayAABB(p, vec, root->ptr_node[i]->box, t))
             {
-                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() == 0) {
+
+                findMinIntersection(p, camera, vec, minTriangle, currentMin, root->ptr_node[i]);
+                /*if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() == 0) {
                     findMinIntersection(p, camera, vec, minTriangle, currentMin, root->ptr_node[i]);
                 }
                 else if(IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)){
@@ -296,7 +309,7 @@ void OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle
                             minTriangle = root->ptr_node[i]->triangles[j];
                         }
                     }
-                }
+                }*/
             }
         }
     }

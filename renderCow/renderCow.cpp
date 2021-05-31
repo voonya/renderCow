@@ -19,7 +19,7 @@ int main()
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
 	MyVector a(camera, getCenter(points));
-	double dist = 6.5;
+	double dist = 10;
 	Screen screen(a, camera, dist);
 	//double** photo;
 	//photo = screen.getPhoto(tr, camera, light);
