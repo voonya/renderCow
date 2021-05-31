@@ -5,7 +5,7 @@
 #include "Parser.h"
 #include "Picture.h"
 #include "OctoTree.h"
-
+#include <time.h>
 Point getCenter(vector<Point> points);
 
 int main()
@@ -24,7 +24,7 @@ int main()
 	//photo = screen.getPhoto(tr, camera, light);
 	
 
-	/*for (int i = 0; i < screen.height; i++)
+	 /*for (int i = 0; i < screen.height; i++)
 	{
 		for (int j = 0; j < screen.width; j++)
 			std::cout << screen.points[i][j].x << " " << screen.points[i][j].y << " " << screen.points[i][j].z << " " << i << " " << j << "\n";
@@ -39,6 +39,8 @@ int main()
 	for (int i = 0; i < screen.pixels; i++)
 		res[i] = new double[screen.pixels];
 	Point minPoint;
+	cout << "start" << endl;
+	unsigned int start = clock();
 	for (int i = 0; i < screen.pixels; i++)
 	{
 		for (int j = 0; j < screen.pixels; j++)
@@ -46,7 +48,7 @@ int main()
 			double min = 1000;
 			Triangle minTriangle;
 			bool flag = false;
-			oct.findMinIntersection(screen.points[i][j], camera, a, minTriangle, min, oct.root);
+			oct.findMinIntersection(screen.points[i][j], camera, MyVector(screen.points[i][j], camera), minTriangle, min, oct.root);
 			if (min!=1000)
 			{
 				MyVector toSun(screen.points[i][j], light);
@@ -58,6 +60,8 @@ int main()
 				res[i][j] = 0;
 		}
 	}
+	unsigned int end = clock();
+	cout << end - start << endl;
 	Picture pic;
 	pic.write_picture("D:\\mybmp.bmp", res, screen.pixels, screen.pixels);
 }

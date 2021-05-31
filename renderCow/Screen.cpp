@@ -2,11 +2,12 @@
 #include <iostream>
 
 
+
 Screen::Screen(MyVector dir, Point camera, double dist1)
 {
 	height = 6;
 	width = 6;
-	pixels = 60;
+	pixels = 600;
 	double resolution = height / pixels;
 	dist = dist1;
 	MyVector n = dir.getOrt();
