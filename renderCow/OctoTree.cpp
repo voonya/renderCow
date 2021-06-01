@@ -64,8 +64,6 @@ void OctoTree::divCube(Node*& root)
         if ((root->ptr_node[i]->triangles.size() > 10) && (root->ptr_node[i]->box.max.x - root->ptr_node[i]->box.min.x > 0.0001))
             divCube(root->ptr_node[i]);
     } 
-    if (root->ptr_node[0] || root->ptr_node[1] || root->ptr_node[2] || root->ptr_node[3] || root->ptr_node[4] || root->ptr_node[5] || root->ptr_node[6] || root->ptr_node[7])
-        root->triangles.clear();
 }
 
 //
@@ -267,42 +265,22 @@ int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& t)
     return true;
 }
 
-bool OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
+void OctoTree::findMinIntersection(Point p, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
 {
     float t;
-    bool fl = true;
-    for (int i = 0; i < 8; i++)
-        if (root->ptr_node[i] != nullptr)
-            fl = false;
-    if (fl && root->triangles.size() == 0)
-        return false;
-
-    //if (IntersectRayAABB(p, vec, root->box, t))
+    if (IntersectRayAABB(p, vec, root->box, t) && (!root->triangles.empty()))
     {
-        //if (root->triangles.size() != 0)
-            //cout << root->triangles.size() << endl;
-        for (int j = 0; j < root->triangles.size(); j++)
-        {
-            double dist = Screen::triangle_intersection(p, camera, root->triangles[j]);
-            if ((dist != 0) && (dist < currentMin))
-            {
-                currentMin = dist;
-                minTriangle = root->triangles[j];
-            }
-        }
         for (int i = 0; i < 8; i++)
         {
-            if ((root->ptr_node[i] != nullptr)&& IntersectRayAABB(p, vec, root->ptr_node[i]->box, t))
+            if ((root->ptr_node[i] != nullptr)  && (!root->ptr_node[i]->triangles.empty()))
             {
-
-                findMinIntersection(p, camera, vec, minTriangle, currentMin, root->ptr_node[i]);
-                /*if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() == 0) {
-                    findMinIntersection(p, camera, vec, minTriangle, currentMin, root->ptr_node[i]);
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
+                    findMinIntersection(p, vec, minTriangle, currentMin, root->ptr_node[i]);
                 }
                 else if(IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)){
                     for (int j = 0; j < root->ptr_node[i]->triangles.size(); j++)
                     {
-                        double dist = Screen::triangle_intersection(p, camera, root->ptr_node[i]->triangles[j]);
+                        double dist = Screen::triangle_intersection(p, vec, root->ptr_node[i]->triangles[j]);
                         if ((dist != 0) && (dist < currentMin))
                         {
                             currentMin = dist;
@@ -310,6 +288,36 @@ bool OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle
                         }
                     }
                 }*/
+            }
+        }
+    }
+}
+
+void OctoTree::findIntersection(Point p, MyVector vec, Node* root, Triangle tr, bool& fl)
+{
+    float t;
+    if (IntersectRayAABB(p, vec, root->box, t) && (!root->triangles.empty()))
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if ((root->ptr_node[i] != nullptr) && (!root->ptr_node[i]->triangles.empty()))
+            {
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
+                    findIntersection(p, vec, root->ptr_node[i], tr, fl);
+                    if (fl)
+                        return;
+                }
+                else if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)) {
+                    for (int j = 0; j < root->ptr_node[i]->triangles.size(); j++)
+                    {
+                        double dist = Screen::triangle_intersection(p, vec, root->ptr_node[i]->triangles[j]);
+                        if ((dist != 0) && (!tr.isEqual(root->ptr_node[i]->triangles[j])))
+                        {
+                            fl = true;
+                            return;
+                        }
+                    }
+                }
             }
         }
     }

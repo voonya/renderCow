@@ -8,7 +8,7 @@ Screen::Screen(MyVector dir, Point camera, double dist1)
 	height = 9;
 	width = 16;
 	pixelsH = 1080;
-	pixelsW = 1960;
+	pixelsW = 1920;
 	double resolution = height / pixelsH;
 	dist = dist1;
 	MyVector n = dir.getOrt();
@@ -77,7 +77,41 @@ double Screen::triangle_intersection(Point point, Point camera, Triangle triangl
 	return MyVector::dot(e2, qvec) * inv_det;
 }
 
-double** Screen::getPhoto(std::vector<Triangle> tr, Point camera, Point light)
+double Screen::triangle_intersection(Point point, MyVector dir, Triangle triangle)
+{
+	MyVector orig(point);
+	MyVector v0(triangle.v1);
+	MyVector v1(triangle.v2);
+	MyVector v2(triangle.v3);
+	//std::cout << v2.x << " " << v2.y << " " << v2.z << "\n";
+
+	MyVector e1 = v1 - v0;
+	MyVector e2 = v2 - v0;
+	// Вычисление вектора нормали к плоскости
+	MyVector pvec = MyVector::cross(dir, e2);
+	float det = MyVector::dot(e1, pvec);
+
+	// Луч параллелен плоскости
+	if (det < 1e-8 && det > -1e-8) {
+		return 0;
+	}
+
+	float inv_det = 1 / det;
+	MyVector tvec = orig - v0;
+	float u = MyVector::dot(tvec, pvec) * inv_det;
+	if (u < 0 || u > 1) {
+		return 0;
+	}
+
+	MyVector qvec = MyVector::cross(tvec, e1);
+	float v = MyVector::dot(dir, qvec) * inv_det;
+	if (v < 0 || u + v > 1) {
+		return 0;
+	}
+	return MyVector::dot(e2, qvec) * inv_det;
+}
+
+/*double** Screen::getPhoto(std::vector<Triangle> tr, Point camera, Point light)
 {
 	double** res = new double* [pixelsH];
 	for (int i = 0; i < pixelsH; i++)
@@ -115,4 +149,4 @@ double** Screen::getPhoto(std::vector<Triangle> tr, Point camera, Point light)
 		}
 	}
 	return res;
-}
+}*/
