@@ -1,6 +1,6 @@
 #include "Picture.h"
 
-void  Picture:: write_picture(string file_name, double**photo, int height1, int width1)
+void  Picture:: write_picture(string file_name, vector<Pixel_triplet> colors, vector<double**>photo, int height1, int width1)
 {
     int width = width1;
     int height = height1;
@@ -37,17 +37,29 @@ void  Picture:: write_picture(string file_name, double**photo, int height1, int 
         pixels[i] = new Pixel_triplet[width];
         for (int j = 0; j < width; j++)
         {
-            if (photo[i][j] != 0)
+            pixels[i][j].redComponent = 0;
+            pixels[i][j].blueComponent = 0;
+            pixels[i][j].greenComponent = 0;
+        }
+    }
+    for (int k = 0; k < colors.size(); k++)
+    {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
             {
-                pixels[i][j].redComponent = 255 * photo[i][j];
-                pixels[i][j].blueComponent = 255 * photo[i][j];
-                pixels[i][j].greenComponent = 255 * photo[i][j];
-            }
-            else
-            {
-                pixels[i][j].redComponent = 0;
-                pixels[i][j].blueComponent = 0;
-                pixels[i][j].greenComponent = 0;
+                if (photo[k][i][j] != 0)
+                {
+                    pixels[i][j].redComponent = max(colors[k].redComponent * photo[k][i][j], (double)pixels[i][j].redComponent);
+                    pixels[i][j].blueComponent = max(colors[k].blueComponent * photo[k][i][j], (double)pixels[i][j].blueComponent);
+                    pixels[i][j].greenComponent = max(colors[k].greenComponent * photo[k][i][j], (double)pixels[i][j].greenComponent);
+                }
+                else
+                {
+                    pixels[i][j].redComponent = max((double)pixels[i][j].redComponent, 0.0);
+                    pixels[i][j].blueComponent = max((double)pixels[i][j].blueComponent, 0.0);
+                    pixels[i][j].greenComponent = max((double)pixels[i][j].greenComponent, 0.0);
+                }
             }
         }
     }

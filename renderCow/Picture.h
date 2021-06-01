@@ -2,6 +2,8 @@
 #include <fstream>
 #include <cstdlib>
 #include "BMPstruct.h"
+#include <vector>
+
 using namespace std;
 class Picture
 {
@@ -10,6 +12,6 @@ class Picture
 public:
 	void reflection_horizontal();
 	void reflectionVertical();
-	void write_picture(string, double**, int, int);
+	void write_picture(string, vector<Pixel_triplet>, vector<double**>, int, int);
 };
 
