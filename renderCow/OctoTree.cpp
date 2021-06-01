@@ -293,7 +293,7 @@ void OctoTree::findMinIntersection(Point p, MyVector vec, Triangle& minTriangle,
     }
 }
 
-void OctoTree::findIntersection(Point p, MyVector vec, Node* root, bool& fl)
+void OctoTree::findIntersection(Point p, MyVector vec, Node* root, Triangle tr, bool& fl)
 {
     float t;
     if (IntersectRayAABB(p, vec, root->box, t) && (!root->triangles.empty()))
@@ -303,7 +303,7 @@ void OctoTree::findIntersection(Point p, MyVector vec, Node* root, bool& fl)
             if ((root->ptr_node[i] != nullptr) && (!root->ptr_node[i]->triangles.empty()))
             {
                 if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
-                    findIntersection(p, vec, root->ptr_node[i], fl);
+                    findIntersection(p, vec, root->ptr_node[i], tr, fl);
                     if (fl)
                         return;
                 }
@@ -311,7 +311,7 @@ void OctoTree::findIntersection(Point p, MyVector vec, Node* root, bool& fl)
                     for (int j = 0; j < root->ptr_node[i]->triangles.size(); j++)
                     {
                         double dist = Screen::triangle_intersection(p, vec, root->ptr_node[i]->triangles[j]);
-                        if (dist != 0)
+                        if ((dist != 0) && (!tr.isEqual(root->ptr_node[i]->triangles[j])))
                         {
                             fl = true;
                             return;

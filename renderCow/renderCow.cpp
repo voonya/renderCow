@@ -49,25 +49,25 @@ int main()
 			double min = 1000;
 			Triangle minTriangle;
 			
-			oct.findMinIntersection(screen.points[i][j], MyVector(screen.points[i][j], camera), minTriangle, min, oct.root);
+			oct.findMinIntersection(screen.points[i][j], MyVector(screen.points[i][j], camera).getOrt(), minTriangle, min, oct.root);
 			if (min!=1000)
 			{
 				bool flag = false;
 				//cout << endl << endl;
 				Point q;
 				MyVector vec = MyVector(screen.points[i][j], camera).getOrt() * min;
-				q = vec + camera;
+				q = vec + screen.points[i][j];
 
-				//MyVector toSun = MyVector(q, light);
-				MyVector toSun = MyVector(light, q);
+				MyVector toSun = MyVector(q, light).getOrt();
+				//MyVector toSun = MyVector(light, q).getOrt();
 				Triangle triangle;
 				double min1 = 1000;
-				cout << toSun.x << " " << toSun.y << " " << toSun.z << " ";
-				//oct.findIntersection(q, toSun, oct.root, flag);
-				oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
-				cout << triangle.v1.x << " " << minTriangle.v1.x << endl;
-				//if (!flag)
-				if (minTriangle.isEqual(triangle))
+				//cout << toSun.x << " " << toSun.y << " " << toSun.z << " ";
+				oct.findIntersection(q, toSun, oct.root, minTriangle, flag);
+				//oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
+				//cout << flag << endl;
+				if (!flag)
+				//if (minTriangle.isEqual(triangle))
 				{				
 					MyVector n = MyVector::cross(MyVector(minTriangle.v1, minTriangle.v2), MyVector(minTriangle.v1, minTriangle.v3));
 					res[i][j] = abs(MyVector::dot(toSun, n)) / (n.getLength() * toSun.getLength());

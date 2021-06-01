@@ -32,5 +32,5 @@ public:
 	bool isTriangleIn(Triangle f, Box box);
 	int IntersectRayAABB(Point p, MyVector vec, Box a, float& t);
 	void findMinIntersection(Point p, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root);
-	void findIntersection(Point p, MyVector vec, Node* root, bool&fl);
+	void findIntersection(Point p, MyVector vec, Node* root, Triangle tr, bool&fl);
 };
