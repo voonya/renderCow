@@ -265,26 +265,58 @@ int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& t)
     return true;
 }
 
-void OctoTree::findMinIntersection(Point p, Point camera, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
+void OctoTree::findMinIntersection(Point p, MyVector vec, Triangle& minTriangle, double& currentMin, Node*root)
+{
+    float t;
+    if (IntersectRayAABB(p, vec, root->box, t) && (!root->triangles.empty()))
+    {
+        cout << "!";
+        for (int i = 0; i < 8; i++)
+        {
+            if ((root->ptr_node[i] != nullptr)  && (!root->ptr_node[i]->triangles.empty()))
+            {
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
+                    findMinIntersection(p, vec, minTriangle, currentMin, root->ptr_node[i]);
+                }
+                else if(IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)){
+                    for (int j = 0; j < root->ptr_node[i]->triangles.size(); j++)
+                    {
+                        double dist = Screen::triangle_intersection(p, vec, root->ptr_node[i]->triangles[j]);
+                        if ((dist != 0) && (dist < currentMin))
+                        {
+                            currentMin = dist;
+                            minTriangle = root->ptr_node[i]->triangles[j];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void OctoTree::findIntersection(Point p, MyVector vec, Node* root, Triangle&triangle, bool& fl)
 {
     float t;
     if (IntersectRayAABB(p, vec, root->box, t) && (!root->triangles.empty()))
     {
         for (int i = 0; i < 8; i++)
         {
-            if ((root->ptr_node[i] != nullptr)  && (!root->ptr_node[i]->triangles.empty()))
+            if ((root->ptr_node[i] != nullptr) && (!root->ptr_node[i]->triangles.empty()))
             {
-                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 15) {
-                    findMinIntersection(p, camera, vec, minTriangle, currentMin, root->ptr_node[i]);
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
+                    findIntersection(p, vec, root->ptr_node[i], triangle, fl);
+                    if (fl)
+                        return;
                 }
-                else if(IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)){
+                else if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)) {
                     for (int j = 0; j < root->ptr_node[i]->triangles.size(); j++)
                     {
-                        double dist = Screen::triangle_intersection(p, camera, root->ptr_node[i]->triangles[j]);
-                        if ((dist != 0) && (dist < currentMin))
+                        double dist = Screen::triangle_intersection(p, vec, root->ptr_node[i]->triangles[j]);
+                        if (dist != 0)
                         {
-                            currentMin = dist;
-                            minTriangle = root->ptr_node[i]->triangles[j];
+                            fl = true;
+                            triangle = root->ptr_node[i]->triangles[j];
+                            return;
                         }
                     }
                 }

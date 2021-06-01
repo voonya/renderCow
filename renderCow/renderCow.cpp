@@ -19,13 +19,13 @@ int main()
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
 	MyVector a(camera, getCenter(points));
-	double dist = 12.5;
+	double dist = 4.5;
 	Screen screen(a, camera, dist);
 	//double** photo;
 	//photo = screen.getPhoto(tr, camera, light);
 	
 
-	 /*for (int i = 0; i < screen.height; i++)
+	 /*or (int i = 0; i < screen.height; i++)
 	{
 		for (int j = 0; j < screen.width; j++)
 			std::cout << screen.points[i][j].x << " " << screen.points[i][j].y << " " << screen.points[i][j].z << " " << i << " " << j << "\n";
@@ -49,13 +49,23 @@ int main()
 			double min = 1000;
 			Triangle minTriangle;
 			bool flag = false;
-			oct.findMinIntersection(screen.points[i][j], camera, MyVector(screen.points[i][j], camera), minTriangle, min, oct.root);
+			oct.findMinIntersection(screen.points[i][j], MyVector(screen.points[i][j], camera), minTriangle, min, oct.root);
 			if (min!=1000)
 			{
-				MyVector toSun(screen.points[i][j], light);
-				MyVector n = MyVector::cross(MyVector(minTriangle.v1, minTriangle.v2), MyVector(minTriangle.v1, minTriangle.v3));
-				res[i][j] = abs(MyVector::dot(toSun, n)) / (n.getLength() * toSun.getLength());
-				//res[i][j] = 1;
+				cout << endl << endl;
+				MyVector toSun = MyVector(screen.points[i][j], light) + MyVector(camera, screen.points[i][j]);
+				Triangle triangle;
+				double min1 = 1000;
+				oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
+				//cout << triangle.v1.x << " " << minTriangle.v1.x << endl;
+				if (minTriangle.isEqual(triangle))
+				{				
+					MyVector n = MyVector::cross(MyVector(minTriangle.v1, minTriangle.v2), MyVector(minTriangle.v1, minTriangle.v3));
+					res[i][j] = abs(MyVector::dot(toSun, n)) / (n.getLength() * toSun.getLength());
+					//res[i][j] = 1;
+				}
+				else
+					res[i][j] = 0;
 			}
 			else
 				res[i][j] = 0;

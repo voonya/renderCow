@@ -9,5 +9,6 @@ public:
 	Point v3;
 	Triangle() {};
 	Triangle(Point v11, Point v22, Point v33) { v1 = v11; v2 = v22; v3 = v33; };
+	bool isEqual(Triangle tr);
 };
 
