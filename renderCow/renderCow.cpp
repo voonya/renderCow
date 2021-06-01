@@ -14,8 +14,8 @@ int main()
 	Parser parser;
 	std::vector<Point> points;
 	std::vector<Triangle> tr = parser.parseFile("cow.obj", points);
-	Point light(1, 1, 1);
-	Point camera(0, -1, 0);
+	Point light(0, 1, 0);
+	Point camera(0, 0, 1);
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
 	MyVector a(camera, getCenter(points));
@@ -48,16 +48,25 @@ int main()
 		{
 			double min = 1000;
 			Triangle minTriangle;
-			bool flag = false;
+			
 			oct.findMinIntersection(screen.points[i][j], MyVector(screen.points[i][j], camera), minTriangle, min, oct.root);
 			if (min!=1000)
 			{
-				cout << endl << endl;
-				MyVector toSun = MyVector(screen.points[i][j], light) + MyVector(camera, screen.points[i][j]);
+				bool flag = false;
+				//cout << endl << endl;
+				Point q;
+				MyVector vec = MyVector(screen.points[i][j], camera).getOrt() * min;
+				q = vec + camera;
+
+				//MyVector toSun = MyVector(q, light);
+				MyVector toSun = MyVector(light, q);
 				Triangle triangle;
 				double min1 = 1000;
+				cout << toSun.x << " " << toSun.y << " " << toSun.z << " ";
+				//oct.findIntersection(q, toSun, oct.root, flag);
 				oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
-				//cout << triangle.v1.x << " " << minTriangle.v1.x << endl;
+				cout << triangle.v1.x << " " << minTriangle.v1.x << endl;
+				//if (!flag)
 				if (minTriangle.isEqual(triangle))
 				{				
 					MyVector n = MyVector::cross(MyVector(minTriangle.v1, minTriangle.v2), MyVector(minTriangle.v1, minTriangle.v3));
@@ -90,4 +99,18 @@ Point getCenter(vector<Point> points)
 	center.y = center.y / points.size();
 	center.z = center.z / points.size();
 	return center;
+}
+
+float hit_sphere(MyVector center, float radius, MyVector dir, MyVector origin) {
+	MyVector oc = origin - center;
+	float a = MyVector::dot(dir, dir);
+	float b = 2.0 * MyVector::dot(oc, dir);
+	float c = MyVector::dot(oc, oc) - radius * radius;
+	float discriminant = b * b - 4 * a * c;
+	if (discriminant < 0) {
+		return -1.0;
+	}
+	else {
+		return (-b - sqrt(discriminant)) / (2.0 * a);
+	}
 }
