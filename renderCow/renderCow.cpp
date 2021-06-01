@@ -14,12 +14,14 @@ int main()
 	Parser parser;
 	std::vector<Point> points;
 	std::vector<Triangle> tr = parser.parseFile("cow.obj", points);
-	Point light(0, 1, 0);
-	Point camera(0, 0, 1);
-	Point point(0, 0, 1);
+	
+	vector<Point> lights;
+	lights.push_back(Point(1, -1, 1));
+	//lights.push_back(Point(-1, -1, 1));
+	Point camera(0, -1, 0);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
 	MyVector a(camera, getCenter(points));
-	double dist = 4.5;
+	double dist = 12.5;
 	Screen screen(a, camera, dist);
 	//double** photo;
 	//photo = screen.getPhoto(tr, camera, light);
@@ -52,32 +54,35 @@ int main()
 			oct.findMinIntersection(screen.points[i][j], MyVector(screen.points[i][j], camera).getOrt(), minTriangle, min, oct.root);
 			if (min!=1000)
 			{
-				bool flag = false;
-				//cout << endl << endl;
-				Point q;
-				MyVector vec = MyVector(screen.points[i][j], camera).getOrt() * min;
-				q = vec + screen.points[i][j];
+				for (int k = 0; k < lights.size(); k++)
+				{
+					bool flag = false;
+					//cout << endl << endl;
+					Point q;
+					MyVector vec = MyVector(screen.points[i][j], camera).getOrt() * min;
+					q = vec + screen.points[i][j];
 
-				MyVector toSun = MyVector(q, light).getOrt();
-				//MyVector toSun = MyVector(light, q).getOrt();
-				Triangle triangle;
-				double min1 = 1000;
-				//cout << toSun.x << " " << toSun.y << " " << toSun.z << " ";
-				oct.findIntersection(q, toSun, oct.root, minTriangle, flag);
-				//oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
-				//cout << flag << endl;
-				if (!flag)
-				//if (minTriangle.isEqual(triangle))
-				{				
+					MyVector toSun = MyVector(q, lights[k]).getOrt();
+					//MyVector toSun = MyVector(light, q).getOrt();
+					Triangle triangle;
+					double min1 = 1000;
+					//cout << toSun.x << " " << toSun.y << " " << toSun.z << " ";
+					oct.findIntersection(q, toSun, oct.root, minTriangle, flag);
+					//oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
+					//cout << flag << endl;
 					MyVector n = MyVector::cross(MyVector(minTriangle.v1, minTriangle.v2), MyVector(minTriangle.v1, minTriangle.v3));
-					res[i][j] = abs(MyVector::dot(toSun, n)) / (n.getLength() * toSun.getLength());
-					//res[i][j] = 1;
+					res[i][j] = max(abs(MyVector::dot(toSun, n)) / (n.getLength() * toSun.getLength()), res[i][j]);
+					if (flag)
+						//if (minTriangle.isEqual(triangle))
+					{
+						res[i][j] = res[i][j] * 0.7;
+						//res[i][j] = 1;
+					}
+						
 				}
-				else
-					res[i][j] = 0;
 			}
 			else
-				res[i][j] = 0;
+				res[i][j] = max(res[i][j], 0.0);
 		}
 	}
 	unsigned int end = clock();
