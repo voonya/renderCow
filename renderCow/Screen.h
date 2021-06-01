@@ -14,7 +14,8 @@ public:
 	double height;
 	double width;
 	double dist;
-	int pixels;
+	int pixelsW;
+	int pixelsH;
 	Point center;
 	Point** points;
 	MyVector up;

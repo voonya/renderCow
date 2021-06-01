@@ -10,6 +10,7 @@ Point getCenter(vector<Point> points);
 
 int main()
 {
+	unsigned int start = clock();
 	Parser parser;
 	std::vector<Point> points;
 	std::vector<Triangle> tr = parser.parseFile("cow.obj", points);
@@ -18,7 +19,7 @@ int main()
 	Point point(0, 0, 1);
 	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
 	MyVector a(camera, getCenter(points));
-	double dist = 4.5;
+	double dist = 12.5;
 	Screen screen(a, camera, dist);
 	//double** photo;
 	//photo = screen.getPhoto(tr, camera, light);
@@ -35,15 +36,15 @@ int main()
 	//Box box1(Point(0, 0, 0), Point(10, 10, 10));
 	//Triangle tr12(Point(0, 0, 1), Point(0, 1, 0), Point(1, 0, 0));
 	OctoTree oct(box, tr);
-	double** res = new double* [screen.pixels];
-	for (int i = 0; i < screen.pixels; i++)
-		res[i] = new double[screen.pixels];
+	double** res = new double* [screen.pixelsH];
+	for (int i = 0; i < screen.pixelsH; i++)
+		res[i] = new double[screen.pixelsW];
 	Point minPoint;
 	cout << "start" << endl;
-	unsigned int start = clock();
-	for (int i = 0; i < screen.pixels; i++)
+	
+	for (int i = 0; i < screen.pixelsH; i++)
 	{
-		for (int j = 0; j < screen.pixels; j++)
+		for (int j = 0; j < screen.pixelsW; j++)
 		{
 			double min = 1000;
 			Triangle minTriangle;
@@ -63,7 +64,7 @@ int main()
 	unsigned int end = clock();
 	cout << end - start << endl;
 	Picture pic;
-	pic.write_picture("D:\\mybmp.bmp", res, screen.pixels, screen.pixels);
+	pic.write_picture("D:\\mybmp.bmp", res, screen.pixelsH, screen.pixelsW);
 }
 
 Point getCenter(vector<Point> points)
