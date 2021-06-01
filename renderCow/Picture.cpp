@@ -81,6 +81,7 @@ void  Picture:: write_picture(string file_name, vector<Pixel_triplet> colors, ve
     fout.close();
 }
 
+
 void Picture::reflectionVertical()
 {
     Pixel_triplet** new_pixels = new Pixel_triplet * [head.height];

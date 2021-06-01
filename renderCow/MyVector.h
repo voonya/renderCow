@@ -20,6 +20,5 @@ public:
 	Point operator+(const Point point);
 	MyVector operator+(const MyVector vec1);
 	MyVector operator-(const MyVector vec1);
-	float lenght();
 };
 

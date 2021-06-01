@@ -18,7 +18,6 @@ struct Node
 		for (int i = 0; i < 8; i++)
 			ptr_node[i] = nullptr;
 	}
-	//Node();
 };
 
 class OctoTree

@@ -1,12 +1,12 @@
 #include "Parser.h"
 #include <iostream>
 using namespace std;
-std::vector<Triangle> Parser::parseFile(std::string filename, vector<Point>& p)
+vector<Triangle> Parser::parseFile(string filename, vector<Point>& p)
 {
-    std::vector<Triangle> triangles;
-    std::vector<Point> points;
-    std::ifstream file(getPath(filename));
-    std::string line;
+    vector<Triangle> triangles;
+    vector<Point> points;
+    ifstream file(getPath(filename));
+    string line;
     if (file.is_open()) {
         while (!file.eof()) {
             getline(file, line);
@@ -21,7 +21,7 @@ std::vector<Triangle> Parser::parseFile(std::string filename, vector<Point>& p)
         }
     }
     else {
-        std::cout << "Cant read the file\n";
+        cout << "Cant read the file\n";
     }
     p = points;
 
@@ -30,7 +30,7 @@ std::vector<Triangle> Parser::parseFile(std::string filename, vector<Point>& p)
 
 Point Parser::parseLine(std::string line)
 {
-    std::string lineCopy = line;
+    string lineCopy = line;
 
     lineCopy.erase(0, 2);
     double x = stod(lineCopy.substr(0, lineCopy.find(" ")));
@@ -43,9 +43,9 @@ Point Parser::parseLine(std::string line)
     return Point(x, y, z);
 }
 
-Triangle Parser::parseLine(std::string line, std::vector<Point> points)
+Triangle Parser::parseLine(string line, vector<Point> points)
 {
-    std::string lineCopy = line;
+    string lineCopy = line;
 
     lineCopy.erase(0, 2);
     int p1 = stoi(lineCopy.substr(0, lineCopy.find("/")));
@@ -56,7 +56,7 @@ Triangle Parser::parseLine(std::string line, std::vector<Point> points)
     return Triangle(points[p1-1], points[p2-1], points[p3-1]);
 }
 
-std::string Parser::getPath(std::string filename)
+string Parser::getPath(string filename)
 {
-    return std::filesystem::current_path().string() + "/" + filename;
+    return filesystem::current_path().string() + "/" + filename;
 }
