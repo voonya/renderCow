@@ -24,9 +24,6 @@
     <ClCompile Include="MyVector.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Triangle.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Screen.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -40,6 +37,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="OctoTree.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

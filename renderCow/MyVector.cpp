@@ -69,9 +69,3 @@ MyVector MyVector::operator-(const MyVector vec1)
 	return vec3;
 }
 
-float MyVector::lenght()
-{
-	float len;
-	len = sqrt(x * x + y * y + z * z );
-	return len;
-}

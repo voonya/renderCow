@@ -6,7 +6,6 @@
 #include "Picture.h"
 #include "OctoTree.h"
 #include <time.h>
-Point getCenter(vector<Point> points);
 
 int main()
 {
@@ -17,32 +16,18 @@ int main()
 	
 	vector<Point> lights;
 	lights.push_back(Point(1, -1, 1));
-	//lights.push_back(Point(-1, -1, 1));
+
 	Point camera(0, -1, 0);
-	Triangle triangle(Point(0, 0, 1), Point(1, 0, 0), Point(0, 1, 0));
-	MyVector a(camera, getCenter(points));
+	MyVector a(camera, Point::getCenter(points));
 	double dist = 12.5;
 	Screen screen(a, camera, dist);
-	//double** photo;
-	//photo = screen.getPhoto(tr, camera, light);
-	
 
-	 /*or (int i = 0; i < screen.height; i++)
-	{
-		for (int j = 0; j < screen.width; j++)
-			std::cout << screen.points[i][j].x << " " << screen.points[i][j].y << " " << screen.points[i][j].z << " " << i << " " << j << "\n";
-	}
-	Picture pic;
-	pic.write_picture("D:\\mybmp.bmp", photo, screen.pixels, screen.pixels);*/
 	Box box(Point(-10,-10,-10), Point(10,10,10));
-	//Box box1(Point(0, 0, 0), Point(10, 10, 10));
-	//Triangle tr12(Point(0, 0, 1), Point(0, 1, 0), Point(1, 0, 0));
 	OctoTree oct(box, tr);
+
 	double** res = new double* [screen.pixelsH];
 	for (int i = 0; i < screen.pixelsH; i++)
 		res[i] = new double[screen.pixelsW];
-	Point minPoint;
-	cout << "start" << endl;
 	
 	for (int i = 0; i < screen.pixelsH; i++)
 	{
@@ -57,28 +42,19 @@ int main()
 				for (int k = 0; k < lights.size(); k++)
 				{
 					bool flag = false;
-					//cout << endl << endl;
 					Point q;
 					MyVector vec = MyVector(screen.points[i][j], camera).getOrt() * min;
 					q = vec + screen.points[i][j];
 
 					MyVector toSun = MyVector(q, lights[k]).getOrt();
-					//MyVector toSun = MyVector(light, q).getOrt();
-					Triangle triangle;
-					double min1 = 1000;
-					//cout << toSun.x << " " << toSun.y << " " << toSun.z << " ";
 					oct.findIntersection(q, toSun, oct.root, minTriangle, flag);
-					//oct.findMinIntersection(light, toSun, triangle, min1, oct.root);
-					//cout << flag << endl;
+
 					MyVector n = MyVector::cross(MyVector(minTriangle.v1, minTriangle.v2), MyVector(minTriangle.v1, minTriangle.v3));
 					res[i][j] = max(abs(MyVector::dot(toSun, n)) / (n.getLength() * toSun.getLength()), res[i][j]);
 					if (flag)
-						//if (minTriangle.isEqual(triangle))
 					{
-						res[i][j] = res[i][j] * 0.7;
-						//res[i][j] = 1;
+						res[i][j] = res[i][j] * 0.6;
 					}
-						
 				}
 			}
 			else
@@ -87,35 +63,7 @@ int main()
 	}
 	unsigned int end = clock();
 	cout << end - start << endl;
+
 	Picture pic;
 	pic.write_picture("D:\\mybmp.bmp", res, screen.pixelsH, screen.pixelsW);
-}
-
-Point getCenter(vector<Point> points)
-{
-	Point center(0, 0, 0);
-	for (int i = 0; i < points.size(); i++)
-	{
-		center.x = center.x + points[i].x;
-		center.y = center.y + points[i].y;
-		center.z = center.z + points[i].z;
-	}
-	center.x = center.x / points.size();
-	center.y = center.y / points.size();
-	center.z = center.z / points.size();
-	return center;
-}
-
-float hit_sphere(MyVector center, float radius, MyVector dir, MyVector origin) {
-	MyVector oc = origin - center;
-	float a = MyVector::dot(dir, dir);
-	float b = 2.0 * MyVector::dot(oc, dir);
-	float c = MyVector::dot(oc, oc) - radius * radius;
-	float discriminant = b * b - 4 * a * c;
-	if (discriminant < 0) {
-		return -1.0;
-	}
-	else {
-		return (-b - sqrt(discriminant)) / (2.0 * a);
-	}
 }

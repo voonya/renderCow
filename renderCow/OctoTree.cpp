@@ -66,8 +66,6 @@ void OctoTree::divCube(Node*& root)
     } 
 }
 
-//
-
 bool OctoTree::isTriangleIn(Triangle f, Box box)
 {
     MyVector c = (MyVector(box.min) + MyVector(box.max)) * 0.5;
@@ -232,11 +230,11 @@ bool OctoTree::isTriangleIn(Triangle f, Box box)
 int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& t)
 {
     MyVector dirfrac;
+
     dirfrac.x = 1.0f / vec.x;
     dirfrac.y = 1.0f / vec.y;
     dirfrac.z = 1.0f / vec.z;
-    // lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
-    // r.org is origin of ray
+
     float t1 = (a.min.x - p.x) * dirfrac.x;
     float t2 = (a.max.x - p.x) * dirfrac.x;
     float t3 = (a.min.y - p.y) * dirfrac.y;
@@ -247,14 +245,12 @@ int OctoTree::IntersectRayAABB(Point p, MyVector vec, Box a, float& t)
     float tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
     float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
 
-    // if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
     if (tmax < 0)
     {
         t = tmax;
         return false;
     }
 
-    // if tmin > tmax, ray doesn't intersect AABB
     if (tmin > tmax)
     {
         t = tmax;
@@ -274,7 +270,7 @@ void OctoTree::findMinIntersection(Point p, MyVector vec, Triangle& minTriangle,
         {
             if ((root->ptr_node[i] != nullptr)  && (!root->ptr_node[i]->triangles.empty()))
             {
-                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > count_tr) {
                     findMinIntersection(p, vec, minTriangle, currentMin, root->ptr_node[i]);
                 }
                 else if(IntersectRayAABB(p, vec, root->ptr_node[i]->box, t)){
@@ -302,7 +298,7 @@ void OctoTree::findIntersection(Point p, MyVector vec, Node* root, Triangle tr, 
         {
             if ((root->ptr_node[i] != nullptr) && (!root->ptr_node[i]->triangles.empty()))
             {
-                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > 10) {
+                if (IntersectRayAABB(p, vec, root->ptr_node[i]->box, t) && root->ptr_node[i]->triangles.size() > count_tr) {
                     findIntersection(p, vec, root->ptr_node[i], tr, fl);
                     if (fl)
                         return;
