@@ -12,6 +12,6 @@ class Picture
 public:
 	void reflection_horizontal();
 	void reflectionVertical();
-	void write_picture(string, vector<Pixel_triplet>, vector<double**>, int, int);
+	void write_picture(string, vector<double**>, int, int);
 };
 
